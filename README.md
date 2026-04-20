@@ -39,24 +39,24 @@ Machine_learning/
 │   │   └── 04_gradient_advanced.ipynb
 │   │
 │   ├── 02_linear_regression/   # 线性回归（5个）
-│   │   ├── 01_linear_regression_theory.ipynb
-│   │   ├── 02_linear_regression_from_scratch.ipynb
-│   │   ├── 03_linear_regression_detailed.ipynb
-│   │   ├── 04_linear_regression_concise.ipynb
-│   │   └── 05_linear_regression_pytorch.ipynb
+│   │   ├── 01_theory.ipynb
+│   │   ├── 02_from_scratch.ipynb
+│   │   ├── 03_detailed.ipynb
+│   │   ├── 04_concise.ipynb
+│   │   └── 05_pytorch.ipynb
 │   │
 │   ├── 03_softmax/             # Softmax 回归（5个）
-│   │   ├── 01_softmax_introduction.ipynb
-│   │   ├── 02_fashion_mnist_dataset.ipynb
-│   │   ├── 03_softmax_from_scratch.ipynb
-│   │   ├── 04_softmax_regression_full.ipynb
-│   │   └── 05_softmax_concise.ipynb
+│   │   ├── 01_introduction.ipynb
+│   │   ├── 02_dataset.ipynb
+│   │   ├── 03_from_scratch.ipynb
+│   │   ├── 04_full_implementation.ipynb
+│   │   └── 05_concise.ipynb
 │   │
 │   ├── 04_mlp/                 # 多层感知机（5个）
-│   │   ├── 01_activation_functions.ipynb
-│   │   ├── 02_mlp_from_scratch.ipynb
-│   │   ├── 03_mlp_detailed.ipynb
-│   │   ├── 04_mlp_concise.ipynb
+│   │   ├── 01_activations.ipynb
+│   │   ├── 02_from_scratch.ipynb
+│   │   ├── 03_detailed.ipynb
+│   │   ├── 04_concise.ipynb
 │   │   └── 05_model_selection.ipynb
 │   │
 │   ├── 05_regularization/      # 正则化技术（2个）
@@ -64,10 +64,10 @@ Machine_learning/
 │   │   └── 02_weight_decay.ipynb
 │   │
 │   └── 06_experiments/         # 实验笔记（4个）
-│       ├── 01_one_hot_encoding.ipynb
-│       ├── 02_scratch_experiment.ipynb
-│       ├── 03_scratch_experiment1.ipynb
-│       └── 04_scratch_experiment2.ipynb
+│       ├── 01_one_hot.ipynb
+│       ├── 02_experiment.ipynb
+│       ├── 03_experiment.ipynb
+│       └── 04_experiment.ipynb
 │
 ├── src/                        # Python 源码（模块化设计）
 │   ├── machine_learning/       # 主模块
