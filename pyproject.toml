@@ -1,12 +1,30 @@
 [project]
 name = "machine-learning"
 version = "0.1.0"
-description = "Add your description here"
+description = "基于 PyTorch 的深度学习学习项目，跟随《动手学深度学习》教程实现"
 readme = "README.md"
 authors = [
-    { name = "Ran" }
+{ name = "Ran", email = "ran@example.com" }
 ]
 requires-python = ">=3.12"
+license = { text = "MIT" }
+keywords = [
+    "machine-learning",
+    "deep-learning",
+    "pytorch",
+    "neural-networks",
+    "tutorial",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = [
     "d2l>=0.17.0",
     "ipython==7.23.1",
