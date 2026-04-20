@@ -78,13 +78,49 @@ Thumbs.db
 uv.lock
 
 # Project specific
-Python3天快速入门机器学项目
+# 学习资料和视频（已解压到其他地方管理）
+Python3天快速入门机器学项目/
 *.zip
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.pdf
+*.tar.gz
+*.rar
+
+# 图片文件（assets/目录下的除外）
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.svg
+/*.pdf
+
+# 数据文件（data/和data1/目录已被git管理，这里防止根目录的大文件）
+/*.csv
+/*.data
+/*.dat
+/*.pkl
+/*.h5
+/*.hdf5
+/*.pt
+/*.pth
+/*.onnx
+/*.pb
+
+# IDE配置（开发环境相关）
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# IDE用户特定配置（不应提交）
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
+
+# 代码质量工具缓存
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
 
 # Temporary files
 tmp/

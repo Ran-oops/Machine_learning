@@ -1,207 +1,153 @@
+"""
+测试脚本
+
+包含机器学习项目的各种测试和演示代码
+"""
+
 import torch
-
-# 定义输入和输出数据
-x = torch.tensor([[1.0], [2.0], [3.0]])
-y = torch.tensor([[2.0], [4.0], [6.0]])
-
-# 定义模型
-model = torch.nn.Linear(1, 1)
-
-# 定义损失函数
-loss_fn = torch.nn.MSELoss()
-
-# 定义优化器
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
-
-# 训练模型
-for t in range(1000):
-    # 前向传播
-    y_pred = model(x)
-
-    # 计算损失
-    loss = loss_fn(y_pred, y)
-
-    # 反向传播
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-
-# 测试模型
-x_test = torch.tensor([[4.0]])
-y_test = model(x_test)
-print(y_test)
-
-# implement FFT with matrix multiplication
-import torch
+import torch.nn as nn
+from src.machine_learning import BPNN, bubble_sort, merge_sort, fft, fft_matrix
+from src.utils.data_utils import load_fashion_mnist, SyntheticRegressionData
+from src.utils.training_utils import train_epoch, evaluate_accuracy, train
 import numpy as np
-import matplotlib.pyplot as plt
-
-def dft_matrix(N):
-    """
-    N: the size of the matrix
-    """
-    n = torch.arange(N).reshape(N, 1)
-    k = torch.arange(N).reshape(1, N)
-    M = torch.exp(-2j * np.pi * k * n / N)
-    return M
 
 
-# 实现一个冒泡排序
-def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n-1):
-        for j in range(n-1-i):
-            if arr[j+1] < arr[j]:
-                arr[j+1], arr[j] = arr[j], arr[j+1]
-    return arr
-
-
-# 实现一个归并排序
-def merge_sort(arr):
-    n = len(arr)
-    if n <= 1:
-        return arr
-    mid = n // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
-    return merge(left, right)
-
-# 合并两个有序数组
-def merge(left, right):
-    res = []
-    i, j = 0, 0
-    while i < len(left) and j < len(right):
-        res.append(left[i]) if left[i] < right[j] else res.append(right[j])
-        i += 1 if left[i] < right[j] else 0
-        j += 1 if left[i] >= right[j] else 0
-    res += left[i:] if i < len(left) else right[j:]
-    return res
-
-# 实现一个比赛的接口， 可以进行加分，减分等
-class Match:
-    def __init__(self, name, score):
-        self.name = name
-        self.score = score
-
-    def add_score(self, score):
-        self.score += score
-
-    def sub_score(self, score):
-        self.score -= score
-
-    def __str__(self):
-        return self.name + ' ' + str(self.score)
+def test_pytorch_linear():
+    """测试 PyTorch 线性回归模型"""
+    print("=" * 50)
+    print("测试 PyTorch 线性回归")
+    print("=" * 50)
     
-    # 将分数存储到mysql数据库
-    def save(self):
-        # 1. 连接数据库
-        # 2. 插入数据
-        # 3. 关闭数据库
-        pass
+    # 定义输入和输出数据
+    x = torch.tensor([[1.0], [2.0], [3.0]])
+    y = torch.tensor([[2.0], [4.0], [6.0]])
     
-# implement a FFT
-def fft(x):
-    x = torch.as_tensor(x, dtype=torch.complex64)
-    N = x.shape[0]
-    if N <= 1:
-        return x
-    even = fft(x[::2])
-    odd = fft(x[1::2])
-    factor = torch.exp(-2j * np.pi * torch.arange(N) / N)
-    return torch.cat([even + factor[:N//2] * odd, even + factor[N//2:] * odd])
-
-# implement a FFT with matrix multiplication
-def fft_matrix(x):
-    x = torch.as_tensor(x, dtype=torch.complex64)
-    N = x.shape[0]
-    if N <= 1:
-        return x
-    factor = torch.exp(-2j * np.pi * torch.arange(N) / N)
-    M = dft_matrix(N)
-    return torch.matmul(M, x)
-
-# implement a FFT without recursion
-def fft_iter(x):
-    x = torch.as_tensor(x, dtype=torch.complex64)
-    N = x.shape[0]
-    if N <= 1:
-        return x
-    factor = torch.exp(-2j * np.pi * torch.arange(N) / N)
-    M = dft_matrix(N)
-    for i in range(int(np.log2(N))):
-        for j in range(2**i):
-            M[2**i+j] = M[2**i+j] * factor[2**i*j]
-    return torch.matmul(M, x)
-
-# implement a FFT without third party library
-def fft_numpy(x):
-    x = np.asarray(x, dtype=np.complex64)
-    N = x.shape[0]
-    if N <= 1:
-        return x
-    even = fft_numpy(x[::2])
-    odd = fft_numpy(x[1::2])
-    factor = np.exp(-2j * np.pi * np.arange(N) / N)
-    return np.concatenate([even + factor[:N//2] * odd, even + factor[N//2:] * odd])
-
-# implement a FFT with matrix multiplication, and without third party library
-def fft_numpy_matrix(x):
-    x = np.asarray(x, dtype=np.complex64)
-    N = x.shape[0]
-    if N <= 1:
-        return x
-    factor = np.exp(-2j * np.pi * np.arange(N) / N)
-    M = dft_matrix(N)
-    return np.matmul(M, x)
-
-# implement a BPNN class
-class BPNN:
-    def __init__(self, input_size, hidden_size, output_size):
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.output_size = output_size
-        
-        # initialize the weights
-        self.W1 = np.random.randn(self.input_size, self.hidden_size)
-        self.W2 = np.random.randn(self.hidden_size, self.output_size)
-        
-        # initialize the bias
-        self.b1 = np.random.randn(self.hidden_size)
-        self.b2 = np.random.randn(self.output_size)
-        
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+    # 定义模型
+    model = nn.Linear(1, 1)
     
-    def sigmoid_derivative(self, x):
-        return x * (1 - x)
-        
-    def forward(self, x):
-        self.z1 = np.dot(x, self.W1) + self.b1
-        self.a1 = self.sigmoid(self.z1)
-        self.z2 = np.dot(self.a1, self.W2) + self.b2
-        self.a2 = self.sigmoid(self.z2)
-        return self.a2
+    # 定义损失函数
+    loss_fn = nn.MSELoss()
     
-    def backward(self, x, y, y_pred, lr):
-        self.loss = y_pred - y
-        self.y_pred = y_pred
+    # 定义优化器
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+    
+    # 训练模型
+    print("训练模型...")
+    for t in range(1000):
+        y_pred = model(x)
+        loss = loss_fn(y_pred, y)
         
-        self.W2_gradient = np.dot(self.a1.T, self.loss * self.sigmoid_derivative(self.y_pred))
-        self.W1_gradient = np.dot(x.T, np.dot(self.loss * self.sigmoid_derivative(self.y_pred), self.W2.T) * self.sigmoid_derivative(self.a1))
-        
-        self.b2_gradient = np.sum(self.loss * self.sigmoid_derivative(self.y_pred), axis=0)
-        self.b1_gradient = np.sum(np.dot(self.loss * self.sigmoid_derivative(self.y_pred), self.W2.T) * self.sigmoid_derivative(self.a1), axis=0)
-        
-        self.W2 -= lr * self.W2_gradient
-        self.W1 -= lr * self.W1_gradient
-        
-        self.b2 -= lr * self.b2_gradient
-        self.b1 -= lr * self.b1_gradient
-        
-    def train(self, x, y, lr, epochs):
-        for epoch in range(epochs):
-            y_pred = self.forward(x)
-            self.backward(x, y, y_pred, lr)
-            
-    def predict(self, x):
-        return self.forward(x)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    
+    # 测试模型
+    x_test = torch.tensor([[4.0]])
+    y_test = model(x_test)
+    print(f"预测 x=4 的结果: {y_test.item():.3f} (期望: 8.0)")
+    print()
+
+
+def test_sorting_algorithms():
+    """测试排序算法"""
+    print("=" * 50)
+    print("测试排序算法")
+    print("=" * 50)
+    
+    # 测试冒泡排序
+    arr = [64, 34, 25, 12, 22, 11, 90]
+    print(f"冒泡排序输入: {arr}")
+    result = bubble_sort(arr)
+    print(f"冒泡排序结果: {result}")
+    
+    # 测试归并排序
+    arr = [38, 27, 43, 3, 9, 82, 10]
+    print(f"归并排序输入: {arr}")
+    result = merge_sort(arr)
+    print(f"归并排序结果: {result}")
+    print()
+
+
+def test_bpnn():
+    """测试反向传播神经网络"""
+    print("=" * 50)
+    print("测试 BPNN")
+    print("=" * 50)
+    
+    # 创建简单数据集：异或问题
+    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y = np.array([[0], [1], [1], [0]])
+    
+    # 创建和训练模型
+    model = BPNN(input_size=2, hidden_size=4, output_size=1)
+    print("训练 XOR 问题...")
+    model.train(X, y, lr=0.5, epochs=5000, verbose=False)
+    
+    # 测试
+    print("预测结果:")
+    for i in range(len(X)):
+        pred = model.predict(X[i:i+1])
+        print(f"  {X[i]} -> {pred[0][0]:.3f} (期望: {y[i][0]})")
+    print()
+
+
+def test_fft():
+    """测试 FFT 算法"""
+    print("=" * 50)
+    print("测试 FFT 算法")
+    print("=" * 50)
+    
+    # 创建测试信号
+    N = 8
+    t = torch.arange(N, dtype=torch.float32)
+    x = torch.sin(2 * np.pi * t / N)
+    
+    print(f"输入信号: {x.numpy()}")
+    
+    # 递归 FFT
+    result = fft(x)
+    print(f"FFT 结果: {result.numpy()}")
+    
+    # 验证与 torch.fft 的一致性
+    expected = torch.fft.fft(x)
+    print(f"期望结果: {expected.numpy()}")
+    print(f"误差: {torch.abs(result - expected).max().item():.6f}")
+    print()
+
+
+def test_data_utils():
+    """测试数据工具"""
+    print("=" * 50)
+    print("测试数据工具")
+    print("=" * 50)
+    
+    # 测试合成回归数据
+    print("创建合成回归数据...")
+    w = torch.tensor([2.0, -3.4])
+    b = 4.2
+    data = SyntheticRegressionData(w=w, b=b, num_examples=1000)
+    train_iter = data.get_dataloader(train=True)
+    
+    print(f"数据批次数量: {len(list(train_iter))}")
+    print()
+
+
+def run_all_tests():
+    """运行所有测试"""
+    print("\n" + "=" * 60)
+    print("Machine Learning 项目测试套件")
+    print("=" * 60 + "\n")
+    
+    test_pytorch_linear()
+    test_sorting_algorithms()
+    test_bpnn()
+    test_fft()
+    test_data_utils()
+    
+    print("=" * 60)
+    print("所有测试完成!")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    run_all_tests()
