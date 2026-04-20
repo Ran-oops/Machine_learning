@@ -9,13 +9,13 @@ default:
 
 # 初始化项目环境
 init:
-    @echo "🚀 初始化项目环境..."
+    @echo "Initializing project environment..."
     uv sync
     uv tool install pre-commit
     uv tool install rumdl
     uv tool install ruff
     pre-commit install --hook-type commit-msg --hook-type pre-push
-    @echo "✅ 环境初始化完成！"
+    @echo "Environment initialized!"
 
 # 同步依赖
 sync:
@@ -63,25 +63,21 @@ check:
 
 # ========== 清理 ==========
 
-# 清理临时文件
+# 清理临时文件（跨平台）
 clean:
     python scripts/clean.py
 
 # 深度清理（包括虚拟环境）
 clean-all: clean
-    @echo "🗑️  删除虚拟环境..."
-    rm -rf .venv/
-    @echo "✅ 深度清理完成！"
+    @echo "Removing virtual environment..."
+    python -c "import shutil; shutil.rmtree('.venv', ignore_errors=True)"
+    @echo "Deep clean complete!"
 
 # ========== 开发工具 ==========
 
-# 启动 Jupyter Notebook
-notebook:
-    jupyter notebook
-
 # 启动 Jupyter Lab
 lab:
-    jupyter lab
+    uv run --with jupyter jupyter lab
 
 # 运行 Python 交互式环境
 python:
@@ -89,30 +85,35 @@ python:
 
 # 查看项目结构
 tree:
-    tree -L 3 -I '.venv|__pycache__|*.pyc|.git' .
+    @python -c "import os; [print(f'{root}/' if dirs else f'{os.path.join(root, file)}') for root, dirs, files in os.walk('.') if '.git' not in root and '.venv' not in root and '__pycache__' not in root for file in ([''] if dirs else files)][:50]"
 
 # 统计代码行数
 stats:
-    @echo "📊 代码统计："
-    @echo ""
-    @echo "Python 文件:"
-    find src -name "*.py" -exec wc -l {} + | tail -1
-    @echo ""
-    @echo "Notebook 文件:"
-    find notebooks -name "*.ipynb" | wc -l
-    @echo ""
-    @echo "总文件数:"
-    find . -type f -not -path "./.venv/*" -not -path "./.git/*" | wc -l
+    @python -c "
+import os
+def count_lines(path, ext):
+    total = 0
+    for root, _, files in os.walk(path):
+        for f in files:
+            if f.endswith(ext):
+                try:
+                    with open(os.path.join(root, f), 'r', encoding='utf-8') as file:
+                        total += len(file.readlines())
+                except:
+                    pass
+    return total
+
+py_lines = count_lines('src', '.py')
+nb_count = sum(1 for _, _, files in os.walk('notebooks') for f in files if f.endswith('.ipynb'))
+print(f'Python code: {py_lines} lines')
+print(f'Notebooks: {nb_count} files')
+"
 
 # ========== 构建 ==========
 
 # 构建包
 build:
     uv build
-
-# 发布到 PyPI (需要配置)
-publish:
-    uv publish
 
 # ========== Git ==========
 
@@ -124,62 +125,47 @@ feature BRANCH:
 fix BRANCH:
     git checkout -b fix/{{BRANCH}}
 
-# 安全的合并到 main (需要先确认)
-merge-to-main BRANCH:
-    @echo "⚠️  即将合并 {{BRANCH}} 到 main"
-    @read -p "确认? [y/N] " confirm && [[ $confirm == [yY] ]] || exit 1
-    git checkout main
-    git pull origin main
-    git merge {{BRANCH}}
-    git push origin main
-
 # ========== 文档 ==========
-
-# 生成文档 (如使用 Sphinx 等)
-docs:
-    @echo "📖 文档功能待实现"
 
 # 查看更新日志
 changelog:
-    @cat CHANGELOG.md | head -50
+    @head -50 CHANGELOG.md
 
 # ========== 帮助 ==========
 
 # 显示所有可用命令
 help:
-    @echo "🔧 Machine Learning 项目命令："
+    @echo "Machine Learning Project Commands:"
     @echo ""
-    @echo "环境设置:"
-    @echo "  just init       - 初始化项目环境"
-    @echo "  just sync       - 同步依赖"
-    @echo "  just update     - 更新依赖"
+    @echo "Environment:"
+    @echo "  just init       - Initialize project environment"
+    @echo "  just sync       - Sync dependencies"
+    @echo "  just update     - Update dependencies"
     @echo ""
-    @echo "代码质量:"
-    @echo "  just format     - 格式化代码"
-    @echo "  just lint       - 检查代码"
-    @echo "  just fix        - 自动修复代码"
-    @echo "  just check-md   - 检查 Markdown"
-    @echo "  just format-md  - 格式化 Markdown"
+    @echo "Code Quality:"
+    @echo "  just format     - Format code"
+    @echo "  just lint       - Lint code"
+    @echo "  just fix        - Auto-fix code issues"
+    @echo "  just check-md   - Check Markdown"
+    @echo "  just format-md  - Format Markdown"
     @echo ""
-    @echo "测试:"
-    @echo "  just test       - 运行所有测试"
-    @echo "  just check      - 项目健康检查"
+    @echo "Testing:"
+    @echo "  just test       - Run all tests"
+    @echo "  just check      - Project health check"
     @echo ""
-    @echo "清理:"
-    @echo "  just clean      - 清理临时文件"
-    @echo "  just clean-all  - 深度清理（包括虚拟环境）"
+    @echo "Cleanup:"
+    @echo "  just clean      - Clean temporary files"
+    @echo "  just clean-all  - Deep clean (including .venv)"
     @echo ""
-    @echo "开发:"
-    @echo "  just notebook   - 启动 Jupyter Notebook"
-    @echo "  just lab        - 启动 Jupyter Lab"
-    @echo "  just python     - 启动 Python"
-    @echo "  just tree       - 查看项目结构"
-    @echo "  just stats      - 代码统计"
+    @echo "Development:"
+    @echo "  just lab        - Start Jupyter Lab"
+    @echo "  just python     - Start Python REPL"
+    @echo "  just tree       - Show project structure"
+    @echo "  just stats      - Code statistics"
     @echo ""
     @echo "Git:"
-    @echo "  just feature <name>  - 创建功能分支"
-    @echo "  just fix <name>      - 创建修复分支"
+    @echo "  just feature <name>  - Create feature branch"
+    @echo "  just fix <name>      - Create fix branch"
     @echo ""
-    @echo "文档:"
-    @echo "  just changelog  - 查看更新日志"
-    @echo "  just docs       - 生成文档"
+    @echo "Documentation:"
+    @echo "  just changelog  - View changelog"
