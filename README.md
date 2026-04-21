@@ -19,93 +19,80 @@
 
 ## 🎯 项目简介
 
-本项目是一个面向机器学习和深度学习初学者的学习仓库，主要特点：
+本项目是一个面向**机器学习和深度学习初学者**的学习仓库，基于《动手学深度学习》教程，主要使用 **PyTorch** 从零实现各种深度学习算法。
 
-- 📚 **系统化学习**：从基础到进阶的完整学习路径
-- 📝 **丰富的笔记**：25+ Jupyter Notebook 详细教程
-- 🔧 **实用工具**：封装的数据加载、训练和可视化工具
-- 🧮 **算法实现**：从零实现经典算法（BPNN、FFT等）
-- 🎨 **可视化支持**：内置多种数据可视化方法
+### 核心特点
+
+- 📚 **系统化学习**：从 PyTorch 基础到深度神经网络的完整学习路径
+- 📝 **主要学习材料**：**25+ Jupyter Notebook 详细教程**（从 `notebooks/01_basics/` 到 `05_regularization/`）
+- 🔧 **辅助 Python 模块**：`src/` 目录包含封装好的可复用代码（模型、损失函数、工具函数）
+- 🧮 **从零实现**：手写 BPNN、FFT 等经典算法，深入理解原理
+- 🎨 **可视化支持**：丰富的数据可视化和训练过程展示
+
+### 学习方式
+
+**📖 推荐学习顺序**：
+1. 打开 `notebooks/` 目录下的 Jupyter Notebook
+2. 按编号顺序阅读（01 → 05）
+3. 运行代码并观察结果
+4. 修改参数进行实验
+
+**💻 `src/` 目录的作用**：
+- 封装 Notebook 中常用的工具函数
+- 提供标准化的模型和数据加载接口
+- 可作为参考实现，但不替代 Notebook 学习
+
+### 内容说明
+
+| 目录 | 内容 | 说明 |
+|------|------|------|
+| `notebooks/01-05/` | **核心教程**（PyTorch） | 按顺序学习 |
+| `notebooks/06_experiments/` | 实验笔记（sklearn） | 早期探索，可选读 |
+| `src/machine_learning/` | Python 模块 | 封装好的工具代码 |
+| `examples/` | 示例脚本 | 快速参考 |
+
+---
 
 ## 📁 项目结构
 
 ```
 Machine_learning/
-├── notebooks/                  # Jupyter Notebook 教程（25个）
-│   ├── 01_basics/              # 基础知识（4个）
-│   │   ├── 01_tensor_creation.ipynb
-│   │   ├── 02_tensor_operations.ipynb
-│   │   ├── 03_gradient_computation.ipynb
-│   │   └── 04_gradient_advanced.ipynb
-│   │
-│   ├── 02_linear_regression/   # 线性回归（5个）
-│   │   ├── 01_theory.ipynb
-│   │   ├── 02_from_scratch.ipynb
-│   │   ├── 03_detailed.ipynb
-│   │   ├── 04_concise.ipynb
-│   │   └── 05_pytorch.ipynb
-│   │
-│   ├── 03_softmax/             # Softmax 回归（5个）
-│   │   ├── 01_introduction.ipynb
-│   │   ├── 02_dataset.ipynb
-│   │   ├── 03_from_scratch.ipynb
-│   │   ├── 04_full_implementation.ipynb
-│   │   └── 05_concise.ipynb
-│   │
-│   ├── 04_mlp/                 # 多层感知机（5个）
-│   │   ├── 01_activations.ipynb
-│   │   ├── 02_from_scratch.ipynb
-│   │   ├── 03_detailed.ipynb
-│   │   ├── 04_concise.ipynb
-│   │   └── 05_model_selection.ipynb
-│   │
-│   ├── 05_regularization/      # 正则化技术（2个）
-│   │   ├── 01_dropout.ipynb
-│   │   └── 02_weight_decay.ipynb
-│   │
-│   └── 06_experiments/         # 实验笔记（4个）
-│       ├── 01_one_hot.ipynb
-│       ├── 02_experiment.ipynb
-│       ├── 03_experiment.ipynb
-│       └── 04_experiment.ipynb
+├── notebooks/              # Jupyter Notebook 教程（25+个）
+│   ├── 01_basics/          # 基础知识（PyTorch张量、梯度）
+│   ├── 02_linear_regression/ # 线性回归
+│   ├── 03_softmax/         # Softmax 回归与图像分类
+│   ├── 04_mlp/             # 多层感知机（神经网络）
+│   ├── 05_regularization/  # 正则化技术（Dropout、权重衰减）
+│   └── 06_experiments/     # 实验笔记（sklearn算法探索）
+│       └── README.md       # 实验笔记说明
 │
-├── src/                        # Python 源码（模块化设计）
-│   ├── machine_learning/       # 主模块
-│   │   ├── algorithms/         # 算法实现
-│   │   │   ├── fft.py         # 快速傅里叶变换（5种实现）
-│   │   │   ├── neural_networks.py  # 神经网络（BPNN）
-│   │   │   └── sorting.py     # 排序算法（冒泡、归并）
-│   │   ├── __init__.py
-│   │   └── py.typed
+├── src/                    # Python 源码
+│   ├── machine_learning/   # PyTorch 深度学习核心实现
+│   │   ├── algorithms/     # 算法（BPNN、FFT等）
+│   │   ├── models/         # 模型（线性回归、Softmax、MLP）
+│   │   ├── losses/         # 损失函数
+│   │   ├── metrics/        # 评估指标
+│   │   └── optim/          # 优化器
 │   │
-│   └── utils/                  # 工具模块
-│       ├── data_utils.py      # 数据加载工具
-│       ├── training_utils.py  # 训练工具（Animator、Accumulator）
-│       └── visualization.py   # 可视化工具
+│   └── utils/              # 工具模块
+│       ├── data_utils.py   # 数据加载
+│       ├── training_utils.py # 训练工具
+│       └── visualization.py  # 可视化
 │
-├── scripts/                    # 实用脚本
-│   ├── setup.py               # 环境设置
-│   ├── clean.py               # 清理临时文件
-│   └── check_project.py       # 项目健康检查
+├── examples/               # 示例代码
+│   ├── linear_regression_example.py
+│   └── mlp_example.py
 │
-├── docs/                       # 项目文档
-│   ├── overview.md            # PyTorch 适用范围概述
-│   ├── README.md              # 文档说明
-│   └── 数学.pdf                # 数学基础
+├── tests/                  # 测试代码
+│   ├── test_algorithms.py
+│   ├── test_models.py
+│   ├── test_metrics.py
+│   └── quick_test.py       # 快速测试脚本
 │
-├── assets/                     # 静态资源
-│   └── images/                 # 图片资源（激活函数图等）
-│
-├── data/                       # 数据集（Fashion-MNIST）
-├── data1/                      # 附加数据
-│
-├── test.py                     # 测试脚本
-├── justfile                    # 任务运行器配置
-├── pyproject.toml              # 项目配置（元数据、依赖）
-├── CHANGELOG.md                # 更新日志
-├── CONTRIBUTING.md             # 贡献指南
-├── .gitignore                  # Git 忽略配置
-└── README.md                   # 本文件
+├── data/ # 数据集（Fashion-MNIST）
+├── docs/ # 项目文档
+├── scripts/ # 实用脚本
+└── README.md # 本文件
 ```
 
 ## 🚀 快速开始
@@ -147,67 +134,90 @@ jupyter notebook
 
 ## 📚 学习路线
 
-### 第一阶段：基础（notebooks/01_basics/）
+### 🎯 如何学习
+
+本项目通过 **Jupyter Notebook 交互式教程** 进行学习，建议按以下顺序：
+
+1. 启动 Jupyter Notebook：`just notebook` 或 `jupyter notebook`
+2. 进入 `notebooks/` 目录，按编号顺序打开文件（01 → 05）
+3. 阅读文档、运行代码、观察结果
+4. 尝试修改参数，理解原理
+5. 必要时参考 `src/` 中的封装代码
+
+### 📖 阶段一：基础（notebooks/01_basics/）
 - PyTorch 张量创建和操作
 - 自动微分与梯度计算
 - 高级梯度计算技巧
 
-### 第二阶段：线性回归（notebooks/02_linear_regression/）
+### 📖 阶段二：线性回归（notebooks/02_linear_regression/）
 - 线性回归理论
 - 从零实现线性回归
 - PyTorch 简洁实现
 
-### 第三阶段：Softmax 回归（notebooks/03_softmax/）
+### 📖 阶段三：Softmax 回归（notebooks/03_softmax/）
 - Softmax 介绍
 - Fashion-MNIST 数据集
 - 图像分类实现
 
-### 第四阶段：多层感知机（notebooks/04_mlp/）
+### 📖 阶段四：多层感知机（notebooks/04_mlp/）
 - 激活函数（ReLU、Sigmoid、Tanh）
 - MLP 从零实现
 - 模型选择与过拟合
 
-### 第五阶段：正则化（notebooks/05_regularization/）
+### 📖 阶段五：正则化（notebooks/05_regularization/）
 - Dropout 正则化
 - 权重衰减（L2正则化）
 
-## 📦 模块使用
+### 🧪 补充学习（notebooks/06_experiments/）
+- 早期实验笔记（使用 scikit-learn）
+- 可作为额外参考资料
+- 详情参见 [实验说明](notebooks/06_experiments/README.md)
 
-### 算法模块
+### 💡 辅助代码（src/）
+
+`src/` 目录包含封装好的 Python 模块，用于：
+- 在 Notebook 中复用代码
+- 参考标准实现
+- 快速搭建实验环境
+
+**学习时无需深入阅读，Notebook 会按需导入使用。**
+
+## 📦 辅助模块（src/）
+
+`src/` 目录提供封装好的工具代码，**主要用于支持 Notebook 中的示例**，不是学习的核心内容。以下是模块的主要功能：
+
+### 核心模块
+
+| 模块 | 功能 | 在 Notebook 中的用途 |
+|------|------|---------------------|
+| `src.machine_learning.models` | 线性回归、Softmax、MLP 模型 | 快速搭建实验模型 |
+| `src.machine_learning.losses` | 损失函数（MSE、交叉熵等） | 训练时使用 |
+| `src.machine_learning.metrics` | 准确率、F1分数等指标 | 模型评估 |
+| `src.machine_learning.optim` | 学习率调度器 | 训练优化 |
+| `src.utils.data_utils` | 数据加载（Fashion-MNIST等） | 数据预处理 |
+| `src.utils.training_utils` | 训练循环、Animator | 训练可视化 |
+| `src.utils.visualization` | 绘图函数 | 结果展示 |
+
+### 示例用法
+
+Notebook 中会用到这些模块：
 
 ```python
-from src.machine_learning import BPNN, fft, merge_sort
+from src.utils import load_fashion_mnist, train_epoch, Animator
 
-# 使用反向传播神经网络
-model = BPNN(input_size=2, hidden_size=4, output_size=1)
-model.train(X, y, lr=0.5, epochs=1000)
-predictions = model.predict(X_test)
+# 加载数据
+train_iter, test_iter = load_fashion_mnist(batch_size=256)
 
-# 使用FFT（5种实现方式）
-import torch
-x = torch.randn(8)
-result = fft(x)           # 递归实现
-result = fft_matrix(x)    # 矩阵实现
-result = fft_iter(x)      # 迭代实现
-
-# 使用排序算法
-sorted_arr = merge_sort([3, 1, 4, 1, 5, 9, 2, 6])
-sorted_arr = bubble_sort([64, 34, 25, 12, 22, 11, 90])
+# 训练可视化
+animator = Animator(xlabel='epoch', legend=['train loss', 'train acc'])
+for epoch in range(num_epochs):
+    train_loss, train_acc = train_epoch(net, train_iter, loss, updater)
+    animator.add(epoch + 1, (train_loss, train_acc))
 ```
 
-### 工具模块
+### 🔧 开发工具
 
-```python
-from src.utils import (
-    load_fashion_mnist,
-    SyntheticRegressionData,
-    train_epoch,
-    evaluate_accuracy,
-    Animator,
-    plot_images
-)
-
-# 加载Fashion-MNIST数据
+本项目使用 [just](https://github.com/casey/just) 作为任务运行器：
 train_iter, test_iter = load_fashion_mnist(batch_size=256)
 
 # 创建合成回归数据
